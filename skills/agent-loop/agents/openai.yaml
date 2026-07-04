@@ -1,0 +1,3 @@
+display_name: Agent Loop
+short_description: Compatibility entry redirected to CSS Professor for professor-style knowledge explanation and research guidance.
+default_prompt: Use this as a compatibility alias for css-professor. Explain, analyze, mentor, or review the topic with the appropriate professor stance.
