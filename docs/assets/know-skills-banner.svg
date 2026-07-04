@@ -1,0 +1,51 @@
+<svg width="1280" height="420" viewBox="0 0 1280 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Know Skills Banner</title>
+  <desc id="desc">A visual map of a private agent skills workspace centered on knowledge, teaching, research mentoring, and method review.</desc>
+  <rect width="1280" height="420" rx="34" fill="#0E1B16"/>
+  <path d="M0 0H1280V420H0V0Z" fill="url(#bg)"/>
+  <circle cx="1110" cy="58" r="170" fill="#D6F36A" opacity=".13"/>
+  <circle cx="160" cy="362" r="210" fill="#65D6AD" opacity=".16"/>
+  <path d="M941 85C1011 143 1027 239 976 299C925 359 826 359 756 301C686 243 670 147 721 87C772 27 871 27 941 85Z" stroke="#E9F7C5" stroke-width="2" opacity=".25"/>
+  <g transform="translate(88 78)">
+    <rect x="0" y="0" width="340" height="248" rx="28" fill="#F6F2E8"/>
+    <rect x="34" y="36" width="272" height="24" rx="12" fill="#0E1B16"/>
+    <rect x="34" y="83" width="180" height="16" rx="8" fill="#3F6B57"/>
+    <rect x="34" y="119" width="230" height="16" rx="8" fill="#78A88E"/>
+    <rect x="34" y="155" width="128" height="16" rx="8" fill="#D79A52"/>
+    <rect x="34" y="191" width="206" height="16" rx="8" fill="#C4D85F"/>
+    <path d="M270 104L296 130L270 156L244 130L270 104Z" fill="#0E1B16"/>
+  </g>
+  <g transform="translate(486 64)">
+    <rect x="0" y="0" width="310" height="84" rx="22" fill="#65D6AD"/>
+    <text x="155" y="53" text-anchor="middle" font-family="Verdana, Arial, sans-serif" font-size="30" font-weight="700" fill="#0E1B16">css-professor</text>
+    <rect x="-44" y="132" width="180" height="70" rx="18" fill="#F6F2E8"/>
+    <text x="46" y="176" text-anchor="middle" font-family="Verdana, Arial, sans-serif" font-size="18" font-weight="700" fill="#0E1B16">Teach</text>
+    <rect x="65" y="222" width="180" height="70" rx="18" fill="#F6F2E8"/>
+    <text x="155" y="266" text-anchor="middle" font-family="Verdana, Arial, sans-serif" font-size="18" font-weight="700" fill="#0E1B16">Mentor</text>
+    <rect x="174" y="132" width="180" height="70" rx="18" fill="#F6F2E8"/>
+    <text x="264" y="176" text-anchor="middle" font-family="Verdana, Arial, sans-serif" font-size="18" font-weight="700" fill="#0E1B16">Review</text>
+    <path d="M155 84V116" stroke="#F6F2E8" stroke-width="5" stroke-linecap="round"/>
+    <path d="M155 116L46 132" stroke="#F6F2E8" stroke-width="5" stroke-linecap="round"/>
+    <path d="M155 116V222" stroke="#F6F2E8" stroke-width="5" stroke-linecap="round"/>
+    <path d="M155 116L264 132" stroke="#F6F2E8" stroke-width="5" stroke-linecap="round"/>
+  </g>
+  <g transform="translate(878 84)">
+    <rect x="0" y="0" width="314" height="232" rx="28" fill="#F6F2E8"/>
+    <text x="157" y="50" text-anchor="middle" font-family="Verdana, Arial, sans-serif" font-size="25" font-weight="700" fill="#0E1B16">Knowledge Tools</text>
+    <rect x="34" y="82" width="246" height="34" rx="17" fill="#0E1B16"/>
+    <text x="157" y="105" text-anchor="middle" font-family="Verdana, Arial, sans-serif" font-size="15" fill="#F6F2E8">book-to-skill</text>
+    <rect x="34" y="132" width="246" height="34" rx="17" fill="#3F6B57"/>
+    <text x="157" y="155" text-anchor="middle" font-family="Verdana, Arial, sans-serif" font-size="15" fill="#F6F2E8">lineage-skill</text>
+    <rect x="34" y="182" width="246" height="34" rx="17" fill="#D79A52"/>
+    <text x="157" y="205" text-anchor="middle" font-family="Verdana, Arial, sans-serif" font-size="15" fill="#0E1B16">agent-loop alias</text>
+  </g>
+  <text x="90" y="380" font-family="Verdana, Arial, sans-serif" font-size="34" font-weight="800" fill="#F6F2E8">Know Skills</text>
+  <text x="326" y="380" font-family="Verdana, Arial, sans-serif" font-size="22" fill="#E9F7C5">private agent-skill workbench for reusable knowledge systems</text>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1280" y2="420" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#10231C"/>
+      <stop offset=".55" stop-color="#173628"/>
+      <stop offset="1" stop-color="#0E1B16"/>
+    </linearGradient>
+  </defs>
+</svg>
