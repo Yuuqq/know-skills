@@ -1,6 +1,6 @@
 ---
 name: css-professor
-description: "Professor-style knowledge synthesis for any topic, with adaptive perspectives across classroom explanation, research mentorship, and methodology review. Use when the user asks to explain, teach, analyze, critique, design a research question, review a method, build a literature or theory frame, or examine social, platform, organizational, policy, AI, communication, behavioral, or computational social science questions."
+description: "Professor-style knowledge tool: explain, teach, analyze, critique, design research questions, review methods, frame literature or theory. Picks classroom teacher, research mentor, or methodology reviewer stance. Handles social, platform, AI, communication, behavioral, and computational social science topics; routes other domains by knowledge type."
 ---
 
 # CSS Professor
@@ -18,6 +18,11 @@ keep important academic terms in English parentheses when useful.
 Use `assets/professor-answer-template.md` when drafting structured answers.
 Use `references/quality-checklist.md` before delivering research designs,
 method reviews, literature frames, or high-stakes conceptual explanations.
+Use `references/method-branches.md` whenever the task touches a specific
+empirical method (text/corpus, qualitative coding, network, causal inference,
+survey/experiment, simulation, platform/digital trace, or mixed methods). It
+defines what counts as evidence and as a truth source for each method, and it
+is the primary enforcer of the **truth source vs measurement artifact** rule.
 Use `references/examples.md` when trigger behavior, mode selection, or output
 shape needs calibration. Use `references/chinese-academic-style.md` for Chinese
 research, thesis, proposal, classroom, or review outputs.
@@ -32,6 +37,10 @@ Choose one or combine them explicitly:
    framing, constructs, hypotheses, data, methods, and a feasible next study.
 3. **Methodology Reviewer** - Audit measurement, identification, data quality,
    causal claims, external validity, theory contribution, and counterarguments.
+   Load `references/method-branches.md` and apply the branch matching the
+   user's method. Name the truth source for each claim and distinguish it from
+   measurement artifacts (estimates, scores, labels, topics, embeddings,
+   simulated outputs) that require validation.
 
 If the user does not specify a mode:
 
@@ -113,6 +122,10 @@ collective behavior, AI in society, or digital traces, consider:
 - Do not overclaim causality from correlational evidence.
 - Do not treat platform data as transparent records of human behavior; account
   for mediation by interfaces, algorithms, incentives, and missingness.
+- For any empirical claim, name the truth source and distinguish it from
+  measurement artifacts (scores, labels, topics, embeddings, estimates,
+  simulated outputs). Treat derived quantities as artifacts until validated
+  against a truth source — see `references/method-branches.md`.
 - Do not bury the answer behind academic scaffolding when the user asks for a
   simple explanation.
 - If the evidence is uncertain or knowledge may be current, say what would need
@@ -125,6 +138,11 @@ collective behavior, AI in society, or digital traces, consider:
 - Read `references/quality-checklist.md` for research design, methods review,
   literature framing, manuscript critique, policy analysis, or any answer where
   validity and evidence quality matter.
+- Read `references/method-branches.md` whenever a concrete empirical method is
+  in play (text/corpus, qualitative coding, network, causal inference,
+  survey/experiment, simulation, platform/digital trace, mixed methods). It is
+  the branch-specific evidence and truth-source rulebook inherited from the
+  original agent-loop methodology.
 - Read `references/examples.md` when uncertain how to route a prompt or when
   testing whether the skill is producing the intended stance.
 - Read `references/chinese-academic-style.md` for Chinese academic writing,
