@@ -175,6 +175,13 @@ Set-Location know-skills
 
 ### 2. 安装本仓库的定制技能
 
+仓库里有两类技能：
+
+- **核心定制技能**（`skills/css-professor`、`skills/agent-loop`）：仓库自己维护、可直接安装。
+- **上游工具技能**（`book-to-skill-master/`、`lineage-skill-main/`）：第三方项目的 vendor 副本，作为"参考源码 + 可选安装"保留，不在快速开始里默认安装。
+
+#### 2a. 核心技能（推荐）
+
 PowerShell:
 
 ```powershell
@@ -196,14 +203,53 @@ $css-professor 用课堂方式解释一下“平台算法如何改变公共讨�
 $agent-loop 帮我审查这个短视频政治参与研究设计
 ```
 
-### 3. 验证技能文件
+#### 2b. 上游工具技能（可选）
 
-如果你的环境有 Codex skill validator，可以运行对应的 `quick_validate.py`。最低限度也可以检查 frontmatter 是否存在 `name` 和 `description`。
+`book-to-skill` 和 `lineage-skill` 是处理"书 / 课程 / 长文档"的工具型技能。它们的 SKILL.md 会通过相对路径调用各自 `scripts/` 下的 Python 脚本（如 `book-to-skill` 的 `scripts/extract.py`、`lineage-skill` 的 `scripts/run_course_pipeline.py`），所以**安装时必须带上 `scripts/` 和 `references/`**，不能只拷 SKILL.md。
+
+PowerShell（按需二选一或都装）：
 
 ```powershell
-Get-Content .\skills\css-professor\SKILL.md -TotalCount 8
-Get-Content .\skills\agent-loop\SKILL.md -TotalCount 8
+$skillsRoot = "$env:USERPROFILE\.agents\skills"
+New-Item -ItemType Directory -Force $skillsRoot | Out-Null
+
+# book-to-skill：PDF/EPUB/DOCX/Markdown/HTML/RTF -> Agent Skill
+Copy-Item -Recurse -Force ".\book-to-skill-master\SKILL.md" "$skillsRoot\book-to-skill\SKILL.md"
+Copy-Item -Recurse -Force ".\book-to-skill-master\scripts"  "$skillsRoot\book-to-skill\scripts"
+Copy-Item -Recurse -Force ".\book-to-skill-master\tools"    "$skillsRoot\book-to-skill\tools"
+
+# lineage-skill：课程/书籍/视频/讲义 -> 可溯源导师方法系统
+Copy-Item -Recurse -Force ".\lineage-skill-main\SKILL.md"     "$skillsRoot\lineage-skill\SKILL.md"
+Copy-Item -Recurse -Force ".\lineage-skill-main\references"   "$skillsRoot\lineage-skill\references"
+Copy-Item -Recurse -Force ".\lineage-skill-main\scripts"      "$skillsRoot\lineage-skill\scripts"
+Copy-Item -Recurse -Force ".\lineage-skill-main\agents"       "$skillsRoot\lineage-skill\agents"
+Copy-Item -Recurse -Force ".\lineage-skill-main\requirements.txt" "$skillsRoot\lineage-skill\requirements.txt"
 ```
+
+> `lineage-skill` 需要按 `lineage-skill-main/requirements.txt` 装 Python 依赖，并在 `.env` 里配置音频转写 / 视觉分析 / 文本蒸馏的 API 凭证（参考 `lineage-skill-main/.env.example` 和 `references/runtime.md`）。`book-to-skill` 会在首次运行时按需提示安装解析依赖。
+
+#### 2c. 来源与许可说明
+
+`book-to-skill-master/` 和 `lineage-skill-main/` 是各自上游开源项目的完整副本（含 `LICENSE.md` / `LICENSE`、`README.md`、`tests/`），仓库没做侵入式改动。升级时优先以上游为准；本仓库只随核心技能一起演进。
+
+### 3. 验证技能文件
+
+仓库自带一个零依赖的最小校验脚本，检查核心技能的 frontmatter 和资源文件是否完整：
+
+```powershell
+python .\skills\css-professor\scripts\validate.py
+```
+
+输出形如：
+
+```text
+OK  css-professor: frontmatter + resources valid
+OK  agent-loop: frontmatter + resources valid
+
+All skills valid.
+```
+
+也可以对任意技能目录单独跑：`python .\skills\css-professor\scripts\validate.py <skill-dir>`。校验失败会以非零退出码和失败清单返回，可在 CI 或修改技能后随手跑一次。
 
 ---
 

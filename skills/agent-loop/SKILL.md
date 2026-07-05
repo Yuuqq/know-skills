@@ -6,9 +6,8 @@ description: "Compatibility entry for the css-professor skill. Use when the user
 # Agent Loop Compatibility Entry
 
 This skill has been redirected. Do not use the old `loop.md` contract workflow.
-For current behavior, use the `css-professor` skill at:
-
-`C:\Users\AD\.agents\skills\css-professor\SKILL.md`
+For current behavior, use the `css-professor` skill in this same skills
+directory.
 
 ## Routing
 
@@ -28,10 +27,21 @@ When this skill is invoked, act as `css-professor`:
 
 ## Resource Handling
 
-Prefer the `css-professor` resources:
+Load the `css-professor` resources by relative reference (do not assume a fixed
+absolute path — host agents resolve skill-relative paths):
 
-- `C:\Users\AD\.agents\skills\css-professor\assets\professor-answer-template.md`
-- `C:\Users\AD\.agents\skills\css-professor\references\quality-checklist.md`
+- `../css-professor/SKILL.md` — primary skill contract.
+- `../css-professor/assets/professor-answer-template.md` — structured answer
+  spine for substantial responses.
+- `../css-professor/references/quality-checklist.md` — validity and evidence
+  checks.
+- `../css-professor/references/method-branches.md` — method-specific evidence
+  rules inherited from the original loop methodology.
+- `../css-professor/references/examples.md` — routing calibration samples.
+- `../css-professor/references/chinese-academic-style.md` — Chinese academic
+  register.
 
-The legacy `agent-loop` resources are retained only for backward compatibility
-and should not be loaded for professor-style knowledge tasks.
+The original `agent-loop` resources (loop-template.md, method-branches.md,
+review-checklist.md, example-loops.md) have been retired. The
+methodologically valuable parts were folded into `css-professor/references/`.
+Do not load the legacy files.
