@@ -41,7 +41,7 @@ absolute path — host agents resolve skill-relative paths):
 - `../css-professor/references/chinese-academic-style.md` — Chinese academic
   register.
 
-The original `agent-loop` resources (`loop-template.md`, `method-branches.md`,
-`review-checklist.md`, `example-loops.md`) have been retired. The
+The original `agent-loop` resources (loop-template.md, method-branches.md,
+review-checklist.md, example-loops.md) have been retired. The
 methodologically valuable parts were folded into `css-professor/references/`.
 Do not load the legacy files.
