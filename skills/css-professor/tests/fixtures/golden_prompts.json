@@ -1,0 +1,198 @@
+{
+  "version": 1,
+  "schema_notes": "Offline eval fixtures for css-professor. Static tests validate metadata completeness and coverage; they do not call a model. must_include / must_not are lowercase substrings expected of a correct answer shape when a live eval is run later.",
+  "allowed_modes": [
+    "Classroom Teacher",
+    "Research Mentor",
+    "Methodology Reviewer",
+    "Blended",
+    "Anti-trigger"
+  ],
+  "allowed_depths": [
+    "Flash",
+    "Class",
+    "Studio",
+    "Review",
+    "Minimal"
+  ],
+  "fixtures": [
+    {
+      "id": "flash-bayes-zh",
+      "lang": "zh",
+      "prompt": "什么是贝叶斯思维？一句话。",
+      "expected_mode": "Classroom Teacher",
+      "expected_depth": "Flash",
+      "must_load": [],
+      "must_not_load": [
+        "method-branches.md",
+        "professor-answer-template.md"
+      ],
+      "must_include": ["证据", "更新"],
+      "must_not": ["研究问题", "假设", "识别策略"],
+      "rubric": "One definitional sentence plus optional caveat; no research scaffolding."
+    },
+    {
+      "id": "class-algo-public-sphere-zh",
+      "lang": "zh",
+      "prompt": "用课堂上能听懂的方式解释：算法推荐为什么会改变公共讨论？",
+      "expected_mode": "Classroom Teacher",
+      "expected_depth": "Class",
+      "must_load": [],
+      "must_not_load": [
+        "method-branches.md"
+      ],
+      "must_include": ["推荐", "可见"],
+      "must_not": ["最小可行设计", "因果识别假设表"],
+      "rubric": "Judgment, concrete analogy, mechanism, one misconception, short recap."
+    },
+    {
+      "id": "studio-shortvideo-politics-zh",
+      "lang": "zh",
+      "prompt": "我想研究短视频平台对大学生政治参与的影响，帮我设计研究问题和方法路线。",
+      "expected_mode": "Research Mentor",
+      "expected_depth": "Studio",
+      "must_load": [
+        "professor-answer-template.md",
+        "quality-checklist.md"
+      ],
+      "must_not_load": [],
+      "must_include": ["研究问题", "选择", "影响"],
+      "must_not": ["一定证明", "必然导致"],
+      "rubric": "RQ variants, constructs split, selection vs influence, min viable design, risks."
+    },
+    {
+      "id": "review-weibo-rumor-trust-zh",
+      "lang": "zh",
+      "prompt": "我用微博转发网络证明谣言扩散会导致社会信任下降，这个设计有什么问题？",
+      "expected_mode": "Methodology Reviewer",
+      "expected_depth": "Review",
+      "must_load": [
+        "method-branches.md",
+        "quality-checklist.md"
+      ],
+      "must_not_load": [],
+      "must_include": ["识别", "信任", "无法"],
+      "must_not": ["设计很有意思，不过"],
+      "rubric": "Fatal flaw first: network alone cannot identify trust decline; name truth source vs artifacts; fixes."
+    },
+    {
+      "id": "flash-selection-bias-en",
+      "lang": "en",
+      "prompt": "What is selection bias in one sentence?",
+      "expected_mode": "Classroom Teacher",
+      "expected_depth": "Flash",
+      "must_load": [],
+      "must_not_load": [
+        "method-branches.md",
+        "professor-answer-template.md"
+      ],
+      "must_include": ["select", "bias"],
+      "must_not": ["research design", "hypothesis", "dag"],
+      "rubric": "Definition only; do not open Studio scaffolding."
+    },
+    {
+      "id": "class-selection-bias-zh",
+      "lang": "zh",
+      "prompt": "解释一下什么是选择偏差。",
+      "expected_mode": "Classroom Teacher",
+      "expected_depth": "Class",
+      "must_load": [],
+      "must_not_load": [
+        "method-branches.md"
+      ],
+      "must_include": ["选择"],
+      "must_not": ["基金选题", "贡献声明"],
+      "rubric": "Depth inflation guard: Class not Studio; definition + example + adjacent term."
+    },
+    {
+      "id": "studio-fund-css-zh",
+      "lang": "zh",
+      "prompt": "帮我把这个基金选题改成更像计算社会科学研究：平台舆论与社会治理现代化。",
+      "expected_mode": "Blended",
+      "expected_depth": "Studio",
+      "must_load": [
+        "chinese-academic-style.md",
+        "quality-checklist.md"
+      ],
+      "must_not_load": [],
+      "must_include": ["机制", "对象", "方法"],
+      "must_not": ["具有重大理论与现实意义"],
+      "rubric": "Chinese academic register; replace slogans with object/mechanism/method/contribution."
+    },
+    {
+      "id": "review-llm-labels-as-construct-en",
+      "lang": "en",
+      "prompt": "We classified 2M tweets with an LLM as 'populist' and conclude populism causes polarization. Review the design.",
+      "expected_mode": "Methodology Reviewer",
+      "expected_depth": "Review",
+      "must_load": [
+        "method-branches.md",
+        "quality-checklist.md"
+      ],
+      "must_not_load": [],
+      "must_include": ["truth source", "artifact"],
+      "must_not": ["solid causal proof"],
+      "rubric": "Text/corpus + causal branches: LLM labels are artifacts; no ID strategy for cause."
+    },
+    {
+      "id": "blended-llm-org-collab-zh",
+      "lang": "zh",
+      "prompt": "LLM 会怎样影响知识工作者的组织协作？",
+      "expected_mode": "Blended",
+      "expected_depth": "Class",
+      "must_load": [],
+      "must_not_load": [
+        "method-branches.md"
+      ],
+      "must_include": ["协作", "责任"],
+      "must_not": ["股价", "市场份额一定"],
+      "rubric": "Class by default; mechanisms over market claims; Studio only if study design asked."
+    },
+    {
+      "id": "anti-pure-coding",
+      "lang": "zh",
+      "prompt": "帮我把这个 Python 脚本的 bug 修了，跑不通。",
+      "expected_mode": "Anti-trigger",
+      "expected_depth": "Minimal",
+      "must_load": [],
+      "must_not_load": [
+        "method-branches.md",
+        "professor-answer-template.md",
+        "quality-checklist.md",
+        "chinese-academic-style.md"
+      ],
+      "must_include": [],
+      "must_not": ["研究问题", "构念效度", "Professor's Take"],
+      "rubric": "No professor scaffolding; debug or fix code only."
+    },
+    {
+      "id": "anti-lineage-pipeline",
+      "lang": "zh",
+      "prompt": "把这门视频课蒸馏成可安装的导师 Skill。",
+      "expected_mode": "Anti-trigger",
+      "expected_depth": "Minimal",
+      "must_load": [],
+      "must_not_load": [
+        "method-branches.md",
+        "professor-answer-template.md"
+      ],
+      "must_include": ["lineage"],
+      "must_not": ["课堂科普老师模式输出如下"],
+      "rubric": "Hand off to lineage-skill; css-professor does not own distillation."
+    },
+    {
+      "id": "review-network-centrality-as-power-zh",
+      "lang": "zh",
+      "prompt": "我们算了合作网络的中心度，直接把高中心度作者定义为学术权力精英，这样可以吗？",
+      "expected_mode": "Methodology Reviewer",
+      "expected_depth": "Review",
+      "must_load": [
+        "method-branches.md"
+      ],
+      "must_not_load": [],
+      "must_include": ["中心", "权力", "外部"],
+      "must_not": ["完全没问题"],
+      "rubric": "Network branch: centrality is artifact; power needs external validation."
+    }
+  ]
+}
