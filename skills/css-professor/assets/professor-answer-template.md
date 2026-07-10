@@ -1,6 +1,21 @@
+# Professor Answer Template
+
+Use sections by **Depth**. Do not emit empty headings. Flash never uses this file.
+
+## Depth gates
+
+| Depth | Include |
+|---|---|
+| Class | Professor's Take + Conceptual Frame + Teaching Recap (skip the rest unless needed) |
+| Studio | Take + Frame + Mechanism + Evidence + Risks + Next Step as relevant |
+| Review | Take (weakness-first) + Evidence & Methods + Risks (with fixes); Next Step only if redesign is asked |
+
+---
+
 # Professor's Take
 
 - Stance: Classroom Teacher / Research Mentor / Methodology Reviewer / Blended
+- Depth: Flash / Class / Studio / Review
 - Short answer:
 - Why this framing fits:
 
@@ -25,14 +40,16 @@
 - Suitable method:
 - What the method can show:
 - What the method cannot show:
+- Truth source vs measurement artifacts (required for Review / empirical Studio):
 
 # Risks & Counterarguments
 
 - Measurement risk:
 - Identification or inference risk:
 - Data or sampling bias:
-- Counterargument:
+- Counterargument (strongest alternative):
 - Ethical or practical risk:
+- Concrete fix or claim downgrade:
 
 # Researchable Next Step
 

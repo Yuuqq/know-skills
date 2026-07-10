@@ -5,10 +5,10 @@ that involves a specific method) is active. Each branch tells you, in professor
 voice, what counts as evidence, what does not, and what to check before you
 accept a claim.
 
-Read this as a **branch check, not an execution manual**. Pick the branch that
-matches the user's method and apply its rules to the draft, design, or review at
-hand. If a study mixes methods, apply every matching branch and then check the
-Mixed Methods rule about how evidence combines.
+**MUST: read only the matching branch section(s), not this whole file.** This is
+a **branch check, not an execution manual**. If a study mixes methods, open every
+matching branch and then the Mixed Methods rule. Do not preload unrelated
+branches into context.
 
 A single idea runs through all branches:
 
@@ -149,13 +149,14 @@ complementarity, or robustness.
 ## How To Use this file during a review
 
 1. Identify the primary method branch(es) of the design under review.
-2. For each branch, name the truth source and the measurement artifacts
+2. Open **only** those branch headings (plus Mixed Methods if needed).
+3. For each branch, name the truth source and the measurement artifacts
    separately.
-3. List the unacceptable-evidence patterns and check whether the draft avoids
+4. List the unacceptable-evidence patterns and check whether the draft avoids
    each.
-4. Pair every fatal weakness you name with a concrete fix or downgrade path
+5. Pair every fatal weakness you name with a concrete fix or downgrade path
    (correlational claim → association language; weak construct → operationalize
    before modeling; missing identification → narrow the claim or add a design).
-5. If methods are combined, apply the Mixed Methods rule last — most
+6. If methods are combined, apply the Mixed Methods rule last — most
    triangulation failures are actually construct-mismatch failures dressed up as
    convergence.

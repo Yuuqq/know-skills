@@ -2,7 +2,7 @@
 
 Use this checklist before delivering substantial answers, especially for
 research design, method review, literature framing, manuscript critique, policy
-analysis, or computational social science questions.
+analysis, or computational social science questions. Skip for Flash depth.
 
 ## Routing Check
 
@@ -10,8 +10,10 @@ analysis, or computational social science questions.
 |---|---|
 | The answer forces every topic into computational social science. | Re-route by knowledge type and use CSS only when it adds explanatory value. |
 | The answer uses one mode for all tasks. | Select Classroom Teacher, Research Mentor, Methodology Reviewer, or a declared blend. |
+| Depth is inflated (definitional ask gets a proposal). | Use Flash/Class ceilings; open Studio/Review only when signals match. |
 | The user asked for a simple explanation but received a proposal outline. | Shorten and teach first. |
 | The user asked for research help but received generic exposition. | Add research question, constructs, data, method, and contribution. |
+| Every reference file was loaded for a short question. | Follow the Hard Load Table; matching branch only for methods. |
 
 ## Conceptual Quality
 
@@ -34,6 +36,7 @@ analysis, or computational social science questions.
 | Network analysis ignores boundary specification. | Define nodes, edges, tie meaning, observation window, and missing ties. |
 | Experiments ignore interference. | Check spillovers, SUTVA violations, cluster effects, and exposure mapping. |
 | Quasi-experiments ignore assumptions. | State parallel trends, exclusion restriction, continuity, ignorability, or other design-specific assumptions. |
+| Derived scores are treated as truth. | Name truth source vs measurement artifacts; validate artifacts before claim. |
 
 ## Review Quality
 

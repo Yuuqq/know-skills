@@ -11,9 +11,10 @@ they run anywhere Python runs:
 What is checked here is deliberately stronger than scripts/validate.py:
 validate.py asserts structural presence (files exist, frontmatter parses).
 These tests assert *behavioral expectations*: the description leads with
-trigger verbs, every method branch carries the truth-source rule, the
-agent-loop alias no longer leaks a hardcoded Windows path, etc. If any of these
-break, the skill's published promises stop being true.
+trigger verbs (EN + ZH), every method branch carries the truth-source rule, the
+agent-loop alias no longer leaks a hardcoded Windows path, Depth and Hard Load
+Table remain wired, etc. If any of these break, the skill's published promises
+stop being true.
 """
 from __future__ import annotations
 
@@ -62,13 +63,21 @@ EXPECTED_METHOD_BRANCHES = [
     "Mixed Methods / Triangulation",
 ]
 
-# Trigger verbs the description promises to lead with. If these stop appearing
-# near the front of the description, agent skill matchers that truncate long
-# descriptions will stop routing the right prompts to this skill.
-DESCRIPTION_TRIGGER_TERMS = [
+# English trigger verbs the description promises near the front (matchers often
+# truncate long descriptions).
+DESCRIPTION_TRIGGER_TERMS_EN = [
     "explain", "teach", "analyze", "critique",
     "design research questions", "review methods", "frame",
 ]
+
+# Chinese triggers for the same intent surface; required in description head so
+# ZH prompts still route after matcher truncation.
+DESCRIPTION_TRIGGER_TERMS_ZH = [
+    "解释", "讲解", "分析", "审稿", "选题", "研究设计",
+]
+
+# Depth ladder labels that must appear in the main contract.
+EXPECTED_DEPTHS = ["Flash", "Class", "Studio", "Review"]
 
 
 class FrontmatterContract(unittest.TestCase):
@@ -81,21 +90,36 @@ class FrontmatterContract(unittest.TestCase):
         fm = _frontmatter(_load(Path("SKILL.md")))
         desc = fm.get("description", "")
         self.assertTrue(desc, "description must not be empty")
-        # 1200 chars is generous; the point is to catch a regression where the
-        # description balloons and trigger words get pushed past where matchers
-        # actually read.
         self.assertLess(len(desc), 1200, f"description too long ({len(desc)} chars)")
 
-    def test_description_leads_with_trigger_terms(self):
+    def test_description_leads_with_english_trigger_terms(self):
         fm = _frontmatter(_load(Path("SKILL.md")))
         desc = fm.get("description", "").lower()
-        # The first 200 chars should carry the trigger verbs — that is what the
-        # "trigger words up front" promise in the README actually means.
-        head = desc[:200]
-        missing = [t for t in DESCRIPTION_TRIGGER_TERMS if t not in head]
+        head = desc[:280]
+        missing = [t for t in DESCRIPTION_TRIGGER_TERMS_EN if t not in head]
         self.assertFalse(
             missing,
-            f"description head does not mention trigger terms: {missing}",
+            f"description head does not mention EN trigger terms: {missing}",
+        )
+
+    def test_description_leads_with_chinese_trigger_terms(self):
+        fm = _frontmatter(_load(Path("SKILL.md")))
+        desc = fm.get("description", "")
+        # Chinese does not case-fold; take a generous head of the raw string.
+        head = desc[:280]
+        missing = [t for t in DESCRIPTION_TRIGGER_TERMS_ZH if t not in head]
+        self.assertFalse(
+            missing,
+            f"description head does not mention ZH trigger terms: {missing}",
+        )
+
+    def test_description_states_anti_scope(self):
+        fm = _frontmatter(_load(Path("SKILL.md")))
+        desc = fm.get("description", "").lower()
+        # At least one negative scope signal so matchers can avoid pure-code tasks.
+        self.assertTrue(
+            "not for" in desc or "coding" in desc,
+            "description should signal out-of-scope (e.g. not for pure coding)",
         )
 
 
@@ -119,7 +143,7 @@ class ResourceCrossReference(unittest.TestCase):
     def test_all_reference_files_are_referenced(self):
         text = _load(Path("SKILL.md"))
         referenced = set(re.findall(r"`((?:references|assets)/[^`]+)`", text))
-        shipped: list[Path] = [
+        shipped: list[str] = [
             p.relative_to(SKILL_ROOT).as_posix()
             for sub in ("references", "assets")
             for p in (SKILL_ROOT / sub).rglob("*") if p.is_file()
@@ -143,13 +167,12 @@ class MethodBranchesInheritance(unittest.TestCase):
 
     def test_each_branch_states_truth_source_rule(self):
         text = _load(Path("references/method-branches.md"))
-        # Split into per-branch blocks so we can attribute the rule to a branch.
         blocks = re.split(r"^## ", text, flags=re.MULTILINE)[1:]
         self.assertGreaterEqual(len(blocks), 8)
         for block in blocks:
             title = block.splitlines()[0].strip()
             if title.startswith("How To Use"):
-                continue  # not a method branch
+                continue
             self.assertIn(
                 "truth source",
                 block.lower(),
@@ -170,20 +193,20 @@ class MethodBranchesInheritance(unittest.TestCase):
             )
 
     def test_truth_source_vs_artifact_rule_stated_up_front(self):
-        # The cross-cutting rule must appear in the preamble, before any branch,
-        # so a reader (or agent) hits it first.
         text = _load(Path("references/method-branches.md"))
         first_branch = text.index("## Text / Corpus Analysis")
         preamble = text[:first_branch].lower()
         self.assertIn("truth source", preamble)
         self.assertIn("measurement artifact", preamble)
 
+    def test_branch_only_load_must_rule(self):
+        text = _load(Path("references/method-branches.md")).lower()
+        self.assertIn("matching branch", text)
+        self.assertIn("not this whole file", text)
+
 
 class SkillBodyContract(unittest.TestCase):
     def test_truth_source_rule_appears_in_main_skill(self):
-        # The truth-source rule must be visible in SKILL.md itself, not only
-        # delegated to a reference file; otherwise a host that only reads
-        # SKILL.md misses the core methodological constraint.
         text = _load(Path("SKILL.md")).lower()
         self.assertIn("truth source", text)
 
@@ -194,9 +217,55 @@ class SkillBodyContract(unittest.TestCase):
 
     def test_quality_bar_distinguishes_artifacts(self):
         text = _load(Path("SKILL.md")).lower()
-        # Quality Bar must call out the artifact category so reviewers know
-        # scores/labels/topics are not automatically truth.
         self.assertIn("measurement artifact", text)
+
+    def test_depth_ladder_present(self):
+        text = _load(Path("SKILL.md"))
+        self.assertIn("## Depth", text)
+        for depth in EXPECTED_DEPTHS:
+            self.assertIn(depth, text, f"Depth ladder missing level: {depth}")
+
+    def test_hard_load_table_present(self):
+        text = _load(Path("SKILL.md"))
+        self.assertIn("## Hard Load Table", text)
+        # Review path must require method-branches; Flash must not force loads.
+        self.assertIn("matching branch only", text.lower())
+        self.assertRegex(text, r"Flash.*None|None beyond this file", re.I | re.S)
+
+    def test_anti_triggers_section_present(self):
+        text = _load(Path("SKILL.md"))
+        self.assertIn("## Anti-Triggers", text)
+        self.assertIn("book-to-skill", text)
+        self.assertIn("lineage-skill", text)
+
+
+class TemplateDepthContract(unittest.TestCase):
+    def test_template_has_depth_gates(self):
+        text = _load(Path("assets/professor-answer-template.md"))
+        self.assertIn("Depth gates", text)
+        for depth in ("Class", "Studio", "Review"):
+            self.assertIn(depth, text)
+        self.assertIn("Flash never uses this file", text)
+
+    def test_template_requires_truth_source_on_review(self):
+        text = _load(Path("assets/professor-answer-template.md")).lower()
+        self.assertIn("truth source", text)
+
+
+class ExamplesContract(unittest.TestCase):
+    def test_examples_cover_anti_triggers_and_depth(self):
+        text = _load(Path("references/examples.md"))
+        self.assertIn("Anti-trigger", text)
+        self.assertIn("Depth inflation guard", text)
+        self.assertIn("Flash depth", text)
+        self.assertIn("lineage-skill", text)
+
+    def test_examples_mention_mode_and_depth(self):
+        text = _load(Path("references/examples.md"))
+        self.assertIn("Depth: Review", text)
+        self.assertIn("Depth: Studio", text)
+        self.assertIn("Depth: Class", text)
+        self.assertIn("Depth: Flash", text)
 
 
 class AgentLoopAliasRegression(unittest.TestCase):
@@ -211,8 +280,6 @@ class AgentLoopAliasRegression(unittest.TestCase):
 
     def test_no_hardcoded_absolute_path(self):
         text = self.ALIAS.read_text(encoding="utf-8")
-        # Windows user profile path, or any drive-letter absolute path, is a
-        # smell that the file has been re-personalized.
         self.assertNotRegex(
             text,
             r"[A-Za-z]:\\Users\\",
@@ -230,19 +297,12 @@ class AgentLoopAliasRegression(unittest.TestCase):
 
     def test_alias_does_not_load_retired_resources(self):
         text = self.ALIAS.read_text(encoding="utf-8")
-        # These four were deleted when the merge completed; the alias must not
-        # promise to load them.
         retired = [
             "loop-template.md",
             "references/review-checklist.md",
             "references/example-loops.md",
             "references/method-branches.md",
         ]
-        # The alias may *mention* these names while saying they are retired,
-        # but must not instruct loading them as live resources. A load
-        # instruction looks like a fenced code path or a "load / read / use"
-        # verb immediately before. We check for the strongest smell: the path
-        # appearing in backticks (which is how SKILL.md marks loadable paths).
         for path in retired:
             self.assertNotIn(
                 f"`{path}`",
