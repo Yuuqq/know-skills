@@ -48,6 +48,11 @@ know-skills
 ├─ skills
 │  ├─ css-professor        # 主力知识技能：教授式解释、研究指导、方法审稿
 │  └─ agent-loop           # 兼容入口：旧调用名转向 css-professor
+├─ scripts
+│  ├─ sync-skills.ps1      # 同步核心技能到本机 Agent skills 目录
+│  └─ sync-skills.sh
+├─ .github/workflows
+│  └─ skill-contract.yml   # validate + unittest + sync dry-run
 ├─ book-to-skill-master    # 上游工具：书籍/文档 -> Agent Skill
 ├─ lineage-skill-main      # 上游工具：课程/书籍/长材料 -> 可溯源方法系统
 └─ docs
@@ -182,25 +187,29 @@ Set-Location know-skills
 
 #### 2a. 核心技能（推荐）
 
-PowerShell:
+用仓库自带同步脚本（推荐）：
+
+```powershell
+.\scripts\sync-skills.ps1
+# 预览： .\scripts\sync-skills.ps1 -DryRun
+# 符号链接（需开发者模式/管理员）： .\scripts\sync-skills.ps1 -Symlink
+```
+
+```bash
+./scripts/sync-skills.sh
+# ./scripts/sync-skills.sh --dry-run
+# ./scripts/sync-skills.sh --symlink
+```
+
+默认安装到 `$HOME/.agents/skills`（Windows 为 `%USERPROFILE%\.agents\skills`）。可用环境变量 `SKILLS_ROOT` 覆盖目标目录。
+
+等价手写 PowerShell：
 
 ```powershell
 $skillsRoot = "$env:USERPROFILE\.agents\skills"
 New-Item -ItemType Directory -Force $skillsRoot | Out-Null
 Copy-Item -Recurse -Force ".\skills\css-professor" "$skillsRoot\css-professor"
-Copy-Item -Recurse -Force ".\skills\agent-loop" "$skillsRoot\agent-loop"
-```
-
-安装后，在支持 Agent Skills 的环境里重新加载技能或开启新会话，然后使用：
-
-```text
-$css-professor 用课堂方式解释一下“平台算法如何改变公共讨论”
-```
-
-或兼容旧入口：
-
-```text
-$agent-loop 帮我审查这个短视频政治参与研究设计
+Copy-Item -Recurse -Force ".\skillsgent-loop" "$skillsRootgent-loop"
 ```
 
 #### 2b. 上游工具技能（可选）
@@ -234,10 +243,16 @@ Copy-Item -Recurse -Force ".\lineage-skill-main\requirements.txt" "$skillsRoot\l
 
 ### 3. 验证技能文件
 
-仓库自带一个零依赖的最小校验脚本，检查核心技能的 frontmatter 和资源文件是否完整：
+零依赖结构校验（frontmatter + 资源路径）：
 
 ```powershell
-python .\skills\css-professor\scripts\validate.py
+python .\skills\css-professor\scriptsalidate.py
+```
+
+行为契约 + 离线黄金题（不调模型）：
+
+```powershell
+python -m unittest skills.css-professor.tests.test_skill_contract skills.css-professor.tests.test_eval_fixtures -v
 ```
 
 输出形如：
@@ -249,7 +264,7 @@ OK  agent-loop: frontmatter + resources valid
 All skills valid.
 ```
 
-也可以对任意技能目录单独跑：`python .\skills\css-professor\scripts\validate.py <skill-dir>`。校验失败会以非零退出码和失败清单返回，可在 CI 或修改技能后随手跑一次。
+推送到 GitHub 后，`.github/workflows/skill-contract.yml` 会在改动 `skills/**` 时自动跑上述检查。
 
 ---
 
@@ -356,24 +371,26 @@ flowchart TD
 
 ### 同步本地运行技能
 
-这个仓库保存的是可移植副本。实际 Agent 运行时通常读取用户目录下的技能目录。修改仓库后，如需让本机 Agent 立即使用，记得同步：
+这个仓库保存的是可移植副本。实际 Agent 运行时通常读取用户目录下的技能目录。修改仓库后同步：
 
 ```powershell
-$skillsRoot = "$env:USERPROFILE\.agents\skills"
-Copy-Item -Recurse -Force ".\skills\css-professor" "$skillsRoot\css-professor"
-Copy-Item -Recurse -Force ".\skills\agent-loop" "$skillsRoot\agent-loop"
+.\scripts\sync-skills.ps1
+```
+
+```bash
+./scripts/sync-skills.sh
 ```
 
 ### 修改技能后的检查
 
-建议每次修改后至少检查：
-
-| 检查项 | 目的 |
+| 检查项 | 命令 / 目的 |
 | --- | --- |
-| `SKILL.md` frontmatter | 确保技能系统能识别名称和触发描述 |
-| 示例提示 | 确保课堂、导师、审稿三种模式仍然稳定 |
-| 中文输出规范 | 确保中文学术风格没有变成口号化表达 |
-| 兼容入口 | 确保旧 `$agent-loop` 仍能路由到新技能 |
+| 结构校验 | `python skills/css-professor/scripts/validate.py` |
+| 契约 + 黄金题 | `python -m unittest skills.css-professor.tests.test_skill_contract skills.css-professor.tests.test_eval_fixtures` |
+| Mode / Depth / 加载表 | 确认 `SKILL.md` 路由与 `tests/fixtures/golden_prompts.json` 一致 |
+| 中文输出规范 | `references/chinese-academic-style.md` 未口号化 |
+| 兼容入口 | 旧 `$agent-loop` 仍路由到 `css-professor` |
+| 本机生效 | `scripts/sync-skills.ps1` 或 `.sh` |
 
 ### 提交和推送
 
@@ -393,10 +410,14 @@ git push
 | 项目 | 状态 |
 | --- | --- |
 | 私有 GitHub 仓库 | 已推送到 `Yuuqq/know-skills` |
-| 主技能 | `css-professor` 已完成 |
+| 主技能 | `css-professor`：Mode + Depth + Hard Load Table |
 | 兼容入口 | `agent-loop` 已重定向 |
+| 离线评测 | `tests/fixtures/golden_prompts.json` + contract tests |
+| 本机同步 | `scripts/sync-skills.ps1` / `scripts/sync-skills.sh` |
+| CI | `.github/workflows/skill-contract.yml` |
 | README 图示 | 使用本地 SVG 和 Mermaid，可在 GitHub 渲染 |
-| 已知限制 | 本仓库保存的是技能副本；运行环境仍需同步到本机 Agent skills 目录 |
+| 已知限制 | 技能副本需同步到本机 Agent skills 目录；live model eval 尚未接入 CI |
+
 
 ---
 

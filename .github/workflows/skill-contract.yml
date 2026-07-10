@@ -1,0 +1,49 @@
+# Validate core knowledge skills (structure + offline contracts).
+name: skill-contract
+
+on:
+  push:
+    branches: [master, main]
+    paths:
+      - "skills/**"
+      - "scripts/**"
+      - ".github/workflows/skill-contract.yml"
+  pull_request:
+    branches: [master, main]
+    paths:
+      - "skills/**"
+      - "scripts/**"
+      - ".github/workflows/skill-contract.yml"
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Structural validate (frontmatter + resources)
+        run: python skills/css-professor/scripts/validate.py
+
+      - name: Contract + offline eval fixtures
+        run: |
+          python -m unittest \
+            skills.css-professor.tests.test_skill_contract \
+            skills.css-professor.tests.test_eval_fixtures \
+            -v
+
+      - name: Sync script dry-run (bash)
+        run: |
+          chmod +x scripts/sync-skills.sh
+          ./scripts/sync-skills.sh --dry-run
+          SKILLS_ROOT="$RUNNER_TEMP/fake-agents-skills" ./scripts/sync-skills.sh
+          test -d "$RUNNER_TEMP/fake-agents-skills/css-professor"
+          test -d "$RUNNER_TEMP/fake-agents-skills/agent-loop"
+          test -f "$RUNNER_TEMP/fake-agents-skills/css-professor/SKILL.md"
