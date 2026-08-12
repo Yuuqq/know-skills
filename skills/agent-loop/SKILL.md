@@ -1,6 +1,7 @@
 ---
 name: agent-loop
-description: "Compatibility entry for css-professor. Use when the user invokes agent-loop for professor-style knowledge explanation, computational social science analysis, research mentoring, methodology review, classroom teaching, theory framing, 解释, 审稿, 选题, 研究设计, or any general knowledge task that should now be handled by css-professor rather than the old loop.md contract."
+description: "Deprecated alias that forwards to css-professor. Kept only so prompts calling agent-loop (解释 / 审稿 / 选题 / 研究设计) still work; new prompts should invoke css-professor directly. Do not list or install as a standalone skill."
+version: "1.0.0"  # compatibility shim — behavior is delegated to css-professor
 ---
 
 # Agent Loop Compatibility Entry

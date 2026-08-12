@@ -1,6 +1,7 @@
 ---
 name: css-professor
 description: "解释、讲解、分析、审稿、选题、研究设计、理论框架；explain, teach, analyze, critique, design research questions, review methods, frame theory. Classroom teacher / research mentor / methodology reviewer. Social, platform, AI-in-society, communication, behavioral, CSS topics; other domains by knowledge type. Not for pure coding, ops, or book/course-to-skill pipelines."
+version: "1.0.0"
 ---
 
 # CSS Professor

@@ -5,14 +5,26 @@
 <h1 align="center">Know Skills</h1>
 
 <p align="center">
-  <strong>一个私人 Agent Skill 工作台：把书、课、研究方法和教授式知识工具沉淀成可安装、可调用、可迭代的知识系统。</strong>
+  <strong>给做计算社会科学、传播学、平台研究与学术方法的人 —— 一个能像教授那样解释、带研究、审稿的 Agent Skill。</strong>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/repository-private-0E1B16?style=for-the-badge" alt="Private repository">
-  <img src="https://img.shields.io/badge/Agent%20Skills-workbench-65D6AD?style=for-the-badge" alt="Agent Skills workbench">
-  <img src="https://img.shields.io/badge/CSS%20Professor-ready-D6F36A?style=for-the-badge" alt="CSS Professor ready">
+  核心 <code>css-professor</code>：课堂科普老师 / 研究型导师 / 方法论审稿人，按问题类型自动路由，强制"真值来源 vs 测量产物"纪律。
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Agent%20Skill-css--professor-65D6AD?style=for-the-badge" alt="css-professor skill">
+  <img src="https://img.shields.io/badge/version-1.0.0-D6F36A?style=for-the-badge" alt="version 1.0.0">
   <img src="https://img.shields.io/badge/language-ZH%20%2F%20EN-D79A52?style=for-the-badge" alt="Chinese and English">
+</p>
+
+<p align="center">
+  <a href="#这是什么">这是什么</a> ·
+  <a href="#为什么比裸-prompt-好用">为什么比裸 prompt 好用</a> ·
+  <a href="#快速开始">快速开始</a> ·
+  <a href="#核心技能css-professor">css-professor</a> ·
+  <a href="#还有这些工具">还有这些工具</a> ·
+  <a href="#维护流程">维护流程</a>
 </p>
 
 <p align="center">
@@ -28,16 +40,37 @@
 
 ## 这是什么
 
-`know-skills` 是一个私有知识技能仓库，用来保存、组合和分发可复用的 Agent Skills。它不是单一工具，而是一个“知识技能工作台”：
+这个仓库的核心产品是 **`css-professor`** —— 一个 Agent Skill，让 AI 像一位计算社会科学教授那样回答你：先判断这是哪类知识问题，再选合适的姿态和深度，并守住"别把相关当因果、别把平台痕迹当真值"的学术纪律。
 
-| 组件 | 用途 | 适合解决的问题 |
+它适合的人：
+
+| 你是 | 它替你拦住的毛病 |
+| --- | --- |
+| 学生 / 自学者 | 解释停在百科铺陈，没有一句话判断和直觉例子 |
+| 正在选题 / 开题 / 写基金的人 | 把泛泛题目当研究问题，构念没拆，机制没分 |
+| 做实证 / 审稿的人 | 因果过度自信，把转发量、话题标签、LLM 分数当成真值 |
+
+**给谁、解决什么**：给做计算社科、传播、平台、组织行为、AI-in-society 研究和写作的人；把"AI 默认会犯的学术过度自信"用三道纪律（路由 + 深度门控 + 真值来源）拦掉。
+
+### 为什么比裸 prompt 好用
+
+裸 prompt 问同一个问题，模型默认会犯三类错：百科式堆砌、把简单问题升成综述、把痕迹当因果。`css-professor` 用三刀拦住它们。三组 before/after 对比见：
+
+👉 **[docs/before-after-demos.md](./docs/before-after-demos.md)**（课堂解释 / 研究设计 / 方法审稿，各一组）
+
+一句话总结：它改变的不是"知道多少"，而是**回答的纪律**——先给判断、按深度收口、命名真值来源。
+
+### 仓库里还有什么
+
+`css-professor` 是上架主推的核心。仓库里还带三个辅助资源（详见 [还有这些工具](#还有这些工具)）：
+
+| 资源 | 定位 | 是否默认安装 |
 | --- | --- | --- |
-| `css-professor` | 计算社会科学教授型任意知识工具 | 解释概念、课堂科普、研究设计、方法审稿、理论框架、中文学术表达 |
-| `agent-loop` | 兼容入口，已重定向到 `css-professor` | 旧调用习惯仍能进入教授型知识工具 |
-| `book-to-skill` | 把书籍、文档或资料文件夹转换成 Agent Skill | 技术书、论文簇、内部文档、规范手册的长期复用 |
-| `lineage-skill` | 把课程、书籍、讲义、视频和笔记蒸馏成可溯源方法系统 | 高密度课程、导师方法、学习资产、可迁移 playbook |
+| `agent-loop` | 旧调用名的兼容入口，已重定向到 `css-professor` | 随核心一起装（仅为兼容老提示词） |
+| `book-to-skill-master/` | 上游工具：把书 / 文档转成 Skill | 可选，vendored 副本（见 [许可说明](#许可说明)） |
+| `lineage-skill-main/` | 上游工具：把课程 / 长材料蒸馏成方法系统 | 可选，vendored 副本 |
 
-目标读者是未来的你、私库协作者，或任何需要接手这个知识技能系统的人。读完本文后，应能判断“该用哪个技能”、把核心技能安装到本地 Agent 环境，并知道如何维护和推送后续改动。
+目标读者：做社科 / 传播 / 平台研究的学生、研究者、写作者，以及任何想给 AI 加上"教授式回答纪律"的人。读完本文后，应能把 `css-professor` 装进本地 Agent 环境，并知道它和不装的区别。
 
 ---
 
@@ -84,9 +117,7 @@ flowchart LR
 
 ---
 
-## 核心技能
-
-### CSS Professor
+## 核心技能：css-professor
 
 `css-professor` 是本仓库当前最重要的定制技能。它的定位是“计算社会科学教授型任意知识工具”，但不会把所有问题都硬套成计算社会科学。它会先判断知识类型，再选择合适视角。
 
@@ -125,21 +156,19 @@ mindmap
 | 示例库 | 校准不同问题应该触发哪种教授模式 |
 | 中文学术风格规范 | 适配中文论文、基金、课堂讲义、研究计划和方法审查 |
 
+---
+
+## 还有这些工具
+
+下面三个不是核心产品，是随仓库一起带的辅助资源。新用户通常不需要第一时间装它们。
+
 ### Agent Loop 兼容入口
 
 `agent-loop` 原本是 loop 契约设计技能。现在它已被改成兼容入口：当你仍然用旧名字调用时，它会转向 `css-professor` 的教授型知识工具，而不是继续默认输出 `loop.md`。
 
-```mermaid
-sequenceDiagram
-    participant User as User
-    participant Alias as agent-loop
-    participant Prof as css-professor
-    User->>Alias: $agent-loop 帮我分析这个研究问题
-    Alias->>Prof: route as professor-style knowledge task
-    Prof-->>User: 课堂解释 / 研究指导 / 方法审稿
-```
+> 新用户可忽略。保留它只是为了不破坏已经在用 `$agent-loop` 的老提示词。
 
-### Book To Skill
+### Book To Skill（上游 vendored 副本）
 
 `book-to-skill` 用来把书籍、PDF、EPUB、DOCX、Markdown、HTML、RTF 等资料转成可安装的 Agent Skill。它适合处理“我经常会回头用，但不想每次重新读”的材料。
 
@@ -152,7 +181,7 @@ sequenceDiagram
 | 论文簇 | 合并成一个领域参考技能 |
 | 标准/规范 | 在写代码或写文档时按需调用 |
 
-### Lineage Skill
+### Lineage Skill（上游 vendored 副本）
 
 `lineage-skill` 面向更重的“课程/书籍/长文档方法系统蒸馏”。它不只是总结内容，而是把老师或作者的方法拆成可复用的判断框架、流程、模板、质量标准和失效条件。
 
@@ -171,7 +200,7 @@ flowchart TB
 
 ## 快速开始
 
-### 1. 克隆私有仓库
+### 1. 克隆仓库
 
 ```powershell
 git clone https://github.com/Yuuqq/know-skills.git
@@ -209,7 +238,7 @@ Set-Location know-skills
 $skillsRoot = "$env:USERPROFILE\.agents\skills"
 New-Item -ItemType Directory -Force $skillsRoot | Out-Null
 Copy-Item -Recurse -Force ".\skills\css-professor" "$skillsRoot\css-professor"
-Copy-Item -Recurse -Force ".\skillsgent-loop" "$skillsRootgent-loop"
+Copy-Item -Recurse -Force ".\skills\agent-loop" "$skillsRoot\agent-loop"
 ```
 
 #### 2b. 上游工具技能（可选）
@@ -246,7 +275,7 @@ Copy-Item -Recurse -Force ".\lineage-skill-main\requirements.txt" "$skillsRoot\l
 零依赖结构校验（frontmatter + 资源路径）：
 
 ```powershell
-python .\skills\css-professor\scriptsalidate.py
+python .\skills\css-professor\scripts\validate.py
 ```
 
 行为契约 + 离线黄金题（不调模型）：
@@ -409,18 +438,31 @@ git push
 
 | 项目 | 状态 |
 | --- | --- |
-| 私有 GitHub 仓库 | 已推送到 `Yuuqq/know-skills` |
-| 主技能 | `css-professor`：Mode + Depth + Hard Load Table |
-| 兼容入口 | `agent-loop` 已重定向 |
-| 离线评测 | `tests/fixtures/golden_prompts.json` + contract tests |
-| 本机同步 | `scripts/sync-skills.ps1` / `scripts/sync-skills.sh` |
-| CI | `.github/workflows/skill-contract.yml` |
-| README 图示 | 使用本地 SVG 和 Mermaid，可在 GitHub 渲染 |
-| 已知限制 | 技能副本需同步到本机 Agent skills 目录；live model eval 尚未接入 CI |
+| GitHub 仓库 | `Yuuqq/know-skills`（MIT，自定义技能部分） |
+| 主技能 | `css-professor` v1.0.0：Mode + Depth + Hard Load Table |
+| 兼容入口 | `agent-loop` 已重定向（仅兼容老调用名） |
+| 离线契约 | 48 个 contract / fixture 测试，stdlib-only |
+| 真模型评测 | `scripts/eval_css_professor.py`（需 `EVAL_API_KEY`，未进 push gate） |
+| 本机同步 | `scripts/sync-skills.ps1`（Windows）/ `sync-skills.sh`（macOS/Linux） |
+| CI | ubuntu 契约 + bash 同步 + **Windows PowerShell 同步** + **上游 smoke** |
+| before/after 证据 | [docs/before-after-demos.md](./docs/before-after-demos.md) |
+| 许可汇总 | [NOTICES.md](./NOTICES.md)（注意：`lineage-skill-main/` 为 PolyForm Noncommercial） |
+| 已知限制 | 上游 vendored 副本未跟踪 SHA（见 `UPSTREAM.sha`）；live eval 需手动跑 |
 
 
 ---
 
 ## 许可说明
 
-本仓库包含多个来源的技能项目和本地定制技能。使用、修改或再分发时，请分别遵守各子项目自带的许可证和来源约束。私有研究、学习和个人工作流用途通常最安全；如需公开发布由书籍、课程或第三方材料生成的技能，应先确认原材料授权。
+本仓库的**自定义技能**（`skills/css-professor`、`skills/agent-loop`）采用 MIT 协议（见根目录 `LICENSE`）。完整许可与来源汇总见 [NOTICES.md](./NOTICES.md)。
+
+⚠️ **重要**：两个上游 vendored 副本的许可**不同**，公开发布前必须注意：
+
+| 目录 | 许可 | 限制 |
+| --- | --- | --- |
+| `book-to-skill-master/` | MIT | 宽松，可随仓库再分发 |
+| `lineage-skill-main/` | **PolyForm Noncommercial** | **禁止商业用途**；若本仓库以商业方式分发，此目录不可随附 |
+
+如果只发布核心 `css-professor`，可只取 `skills/` 目录，不携带这两个上游副本。两个上游的来源快照见 `UPSTREAM.sha`（下次同步时记录上游 commit）。
+
+私有研究、学习和个人工作流用途通常最安全；如需公开发布由书籍、课程或第三方材料生成的技能，应先确认原材料授权。

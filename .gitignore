@@ -10,6 +10,9 @@ __pycache__/
 *.bak
 *.bak.[0-9]*
 
+# Editor / agent host local config (machine-specific, never ship)
+.omx/
+
 # OS
 .DS_Store
 Thumbs.db

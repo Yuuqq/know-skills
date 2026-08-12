@@ -47,3 +47,124 @@ jobs:
           test -d "$RUNNER_TEMP/fake-agents-skills/css-professor"
           test -d "$RUNNER_TEMP/fake-agents-skills/agent-loop"
           test -f "$RUNNER_TEMP/fake-agents-skills/css-professor/SKILL.md"
+
+  # Test the PowerShell install path that README promotes as the primary
+  # quickstart. The bash sync script is exercised above; this closes the gap
+  # where a Windows-only regression in sync-skills.ps1 would ship uncaught.
+  windows-install:
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Dry-run (PowerShell)
+        shell: pwsh
+        run: |
+          ./scripts/sync-skills.ps1 -DryRun
+
+      - name: Real install into temp SKILLS_ROOT
+        shell: pwsh
+        env:
+          SKILLS_ROOT: ${{ runner.temp }}\fake-agents-skills
+        run: |
+          ./scripts/sync-skills.ps1
+
+      - name: Assert core skills landed
+        shell: pwsh
+        env:
+          SKILLS_ROOT: ${{ runner.temp }}\fake-agents-skills
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $root = $env:SKILLS_ROOT
+          foreach ($name in @('css-professor', 'agent-loop')) {
+            $skillMd = Join-Path $root "$name/SKILL.md"
+            if (-not (Test-Path -LiteralPath $skillMd -PathType Leaf)) {
+              throw "Missing expected file: $skillMd"
+            }
+            Write-Host "OK   $skillMd"
+          }
+
+  # Lightweight smoke coverage for the two vendored upstream tools
+  # (book-to-skill-master, lineage-skill-main). README promotes both as
+  # first-class, but they previously had zero CI. This job only verifies
+  # static integrity; it never calls out to paid APIs.
+  upstream-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Verify upstream SKILL.md frontmatter (name + description)
+        run: |
+          set -e
+          python - <<'PY'
+          from pathlib import Path
+
+          def parse_frontmatter(text):
+              if not text.startswith("---"):
+                  raise AssertionError("missing leading '---' frontmatter fence")
+              _, body, _ = text.split("---", 2)
+              fields = {}
+              for line in body.splitlines():
+                  line = line.strip()
+                  if not line or line.startswith("#"):
+                      continue
+                  if ":" not in line:
+                      continue
+                  key, _, val = line.partition(":")
+                  fields[key.strip()] = val.strip().strip('"').strip("'")
+              return fields
+
+          targets = [
+              "book-to-skill-master/SKILL.md",
+              "lineage-skill-main/SKILL.md",
+          ]
+          missing = []
+          for rel in targets:
+              p = Path(rel)
+              if not p.is_file():
+                  missing.append(rel)
+                  continue
+              fm = parse_frontmatter(p.read_text(encoding="utf-8"))
+              for req in ("name", "description"):
+                  if not fm.get(req):
+                      raise AssertionError(f"{rel}: frontmatter missing '{req}'")
+              print(f"OK   {rel}: name='{fm['name']}'")
+          if missing:
+              raise AssertionError(f"Missing SKILL.md files: {missing}")
+          PY
+
+      - name: book-to-skill import smoke
+        run: |
+          pip install -e ./book-to-skill-master --quiet
+          python -c "import book_to_skill; print('book_to_skill OK ->', book_to_skill.__file__)"
+
+      - name: lineage-skill entry scripts compile-check (no execution)
+        run: |
+          set -e
+          cd lineage-skill-main/scripts
+          # Main entry points referenced in SKILL.md as runnable commands.
+          # compileall validates syntax without importing (they need API keys).
+          ENTRY_SCRIPTS=(
+            run_course_pipeline.py
+            build_course_package.py
+            build_course_skill.py
+            build_multi_course_package.py
+            build_course_catalog.py
+            fetch_course_evidence.py
+          )
+          for f in "${ENTRY_SCRIPTS[@]}"; do
+            if [ ! -f "$f" ]; then
+              echo "MISSING entry script: $f" >&2
+              exit 1
+            fi
+          done
+          python -m compileall -q "${ENTRY_SCRIPTS[@]}"
+          echo "compileall OK for ${#ENTRY_SCRIPTS[@]} entry scripts"
