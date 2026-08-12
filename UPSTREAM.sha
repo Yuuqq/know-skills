@@ -1,0 +1,15 @@
+# Vendored upstream snapshots. Update the SHA on each sync from upstream.
+# Verify with: git log --oneline in the upstream repo.
+#
+# These directories were copied wholesale into this repo and are NOT nested
+# git repositories (no .git inside). There is therefore no local history to
+# record a commit SHA from. On the next sync from the upstream repos, record
+# the upstream commit hash here so the vendored snapshot is auditable.
+#
+# Check for a nested repo before recording a SHA:
+#   git -C book-to-skill-master rev-parse HEAD
+#   git -C lineage-skill-main  rev-parse HEAD
+# If that fails (no .git), capture the upstream commit at the time of sync.
+
+book-to-skill-master:  vendored-snapshot (no upstream git history — record upstream commit on next sync)
+lineage-skill-main:    vendored-snapshot (no upstream git history — record upstream commit on next sync)
