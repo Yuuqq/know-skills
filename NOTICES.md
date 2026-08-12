@@ -1,31 +1,26 @@
 # Notices
 
-This repository bundles original work plus two vendored upstream projects.
-Each component is licensed as noted below.
-
 ## Repository's own skills
 
 - `skills/css-professor/`
-- `skills/agent-loop/`
+- `skills/agent-loop/` (deprecated alias that forwards to `css-professor`)
 
 Licensed under the **MIT License** — see `LICENSE` at the repository root.
 Copyright (c) 2026 Yuuqq.
 
-## Vendored upstream: `book-to-skill-master/`
+## Formerly vendored upstream projects
 
-- Path: `book-to-skill-master/`
-- License: **MIT License**
-- Copyright (c) 2025 virgiliojr94
-- See: `book-to-skill-master/LICENSE.md`
+Until the first public release (v1.0.0) this repository carried full vendored
+snapshots of two upstream projects. They were removed from the working tree
+before publishing so that (a) installing this repo yields exactly one product
+skill, and (b) no noncommercial-licensed code is redistributed from an
+MIT-labeled repository. The snapshots remain only in pre-v1.0.0 git history.
 
-## Vendored upstream: `lineage-skill-main/`
+| Project | Upstream | License |
+| --- | --- | --- |
+| book-to-skill (was `book-to-skill-master/`) | <https://github.com/virgiliojr94/book-to-skill> | MIT — Copyright (c) 2025 virgiliojr94 |
+| lineage-skill (was `lineage-skill-main/`) | <https://github.com/JuneYaooo/lineage-skill> | PolyForm Noncommercial 1.0.0 — Copyright (c) 2026 JuneYaooo |
 
-- Path: `lineage-skill-main/`
-- License: **PolyForm Noncommercial License 1.0.0**
-  (https://polyformproject.org/licenses/noncommercial/1.0.0)
-- Required Notice: Copyright (c) 2026 JuneYaooo
-- See: `lineage-skill-main/LICENSE`
-
-> Note: The PolyForm Noncommercial license restricts commercial use of the
-> `lineage-skill-main/` subtree. It does not apply to the repository's own
-> skills, which are MIT-licensed.
+If you need those tools, install them from their upstream repositories. The
+PolyForm Noncommercial license restricts commercial use of lineage-skill; it
+never applied to this repository's own MIT-licensed skills.

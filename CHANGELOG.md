@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.0] - 2026-07-13
+## [1.0.0] - 2026-08-13
 
 First tracked release of the Agent Skill workbench. Captures the current,
 publicly-releasable state of the repository.
@@ -22,9 +22,8 @@ publicly-releasable state of the repository.
   the legacy `loop.md` contract and its hardcoded Windows path. Versioned at
   `1.0.0` as a compatibility entry.
 - Version field (`version: "1.0.0"`) in the YAML frontmatter of both skills.
-- Compliance scaffolding for public release: root `LICENSE` (MIT, Yuuqq),
-  `NOTICES.md` summarizing per-component licensing, and `UPSTREAM.sha`
-  recording the vendored upstream snapshot provenance.
+- Compliance scaffolding for public release: root `LICENSE` (MIT, Yuuqq) and
+  `NOTICES.md` summarizing per-component licensing and upstream provenance.
 - Continuous Integration runs the skill contract and eval-fixture suites.
 
 ### Changed
@@ -40,5 +39,10 @@ publicly-releasable state of the repository.
 - Legacy agent-loop resources (`loop-template.md`, `review-checklist.md`,
   `example-loops.md`, and the old `references/method-branches.md`) are retired
   and no longer referenced.
+- Vendored upstream snapshots (`book-to-skill-master/`, `lineage-skill-main/`)
+  are no longer redistributed; they are referenced by link in `NOTICES.md`
+  instead. lineage-skill is PolyForm Noncommercial, which does not belong in an
+  MIT-labeled repository, and a single-skill repo installs cleanly with
+  `npx skills add`. The snapshots exist only in pre-v1.0.0 git history.
 
 [1.0.0]: https://github.com/Yuuqq/know-skills/releases/tag/v1.0.0
