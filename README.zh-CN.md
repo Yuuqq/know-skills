@@ -98,7 +98,8 @@ git clone https://github.com/Yuuqq/know-skills.git; Set-Location know-skills
 ## Before/After 对比
 
 同一个提问，装与不装的差别。三组完整对比（课堂解释 / 研究设计 / 方法审稿）见
-[docs/before-after-demos.md](./docs/before-after-demos.md)。最短版本：
+[docs/before-after-demos.md](./docs/before-after-demos.md)（[English
+version](./docs/before-after-demos.en.md)）。最短版本：
 
 > **提问**："我用微博转发网络证明谣言扩散导致社会信任下降，这个设计有什么问题？"
 >

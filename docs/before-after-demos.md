@@ -1,5 +1,7 @@
 # CSS Professor — Before / After Demos
 
+> English version: [before-after-demos.en.md](./before-after-demos.en.md)
+
 > 为什么要装这个 skill？下面三组对比回答同一个问题：**裸 prompt（直接问模型）vs. 装上 css-professor 后的输出。**
 >
 > 左边是模型默认会犯的"百科式/过度自信"毛病；右边是 skill 强制路由 + 深度门控 + 真值来源纪律后的输出形态。这些是**目标形态样例**（calibrated exemplars），用于展示 skill 改变了什么；真实输出以 live eval 为准（见 `scripts/eval_css_professor.py`）。

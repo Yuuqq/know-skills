@@ -105,7 +105,8 @@ measurement-artifact distinction.
 
 Same prompt, with and without the skill — three worked comparisons (classroom
 explanation, research design, methods review) live in
-[docs/before-after-demos.md](./docs/before-after-demos.md). The short version:
+[docs/before-after-demos.en.md](./docs/before-after-demos.en.md)
+([中文原版](./docs/before-after-demos.md)). The short version:
 
 > **Prompt:** "I use a Weibo retweet network to prove rumor diffusion causes
 > declining social trust — what's wrong?"
