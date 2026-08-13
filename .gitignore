@@ -13,6 +13,9 @@ __pycache__/
 # Editor / agent host local config (machine-specific, never ship)
 .omx/
 
+# Local-only working notes (launch checklist etc.), never ship
+*.local.md
+
 # OS
 .DS_Store
 Thumbs.db
