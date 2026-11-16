@@ -38,8 +38,9 @@ class FixtureLoading(unittest.TestCase):
         bundle = eval_css_professor.load_bundle()
         self.assertIn("fixtures", bundle)
         self.assertGreaterEqual(len(bundle["fixtures"]), 10)
-        # The known golden set is 12; pin a floor so shrinkage is caught.
-        self.assertEqual(len(bundle["fixtures"]), 12)
+        # Exact public inventory: 12 original prompts + 10 English twins
+        # for Chinese-first prompts. Equality still rejects shrinkage.
+        self.assertEqual(len(bundle["fixtures"]), 22)
 
     def test_each_fixture_has_scoring_fields(self):
         fixtures = eval_css_professor.load_bundle()["fixtures"]
