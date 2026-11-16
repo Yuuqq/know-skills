@@ -269,23 +269,29 @@ class FixtureRoutingConsistency(unittest.TestCase):
             )
 
     def test_review_fixtures_require_truth_or_identification_language(self):
+        # Original markers stay. English forms are the same demands translated
+        # (识别/无法/中心/权力/外部), so a faithful twin still has to name
+        # identification or truth-source language. No marker was removed.
+        markers = (
+            "truth source",
+            "artifact",
+            "识别",
+            "无法",
+            "中心",
+            "权力",
+            "外部",
+            "identification",
+            "cannot",
+            "centrality",
+            "power",
+            "external",
+        )
         for fx in self.fixtures:
             if fx["expected_depth"] != "Review":
                 continue
-            markers = " ".join(fx["must_include"]).lower()
+            blob = " ".join(fx["must_include"]).lower()
             self.assertTrue(
-                any(
-                    k in markers
-                    for k in (
-                        "truth source",
-                        "artifact",
-                        "识别",
-                        "无法",
-                        "中心",
-                        "权力",
-                        "外部",
-                    )
-                ),
+                any(k in blob for k in markers),
                 f"{fx['id']}: Review must_include should demand identification/truth-source language",
             )
 
@@ -295,6 +301,145 @@ class FixtureRoutingConsistency(unittest.TestCase):
         self.assertEqual(fx["expected_depth"], "Class")
         self.assertEqual(fx["expected_mode"], "Classroom Teacher")
         self.assertIn("method-branches.md", fx["must_not_load"])
+
+
+def _has_cjk(text: str) -> bool:
+    return any("\u4e00" <= ch <= "\u9fff" for ch in text)
+
+
+def _english_twin_id(source_id: str) -> str:
+    """Chinese-first ids gain an -en twin. `-zh` is replaced; other zh ids append."""
+    if source_id.endswith("-zh"):
+        return source_id[: -len("-zh")] + "-en"
+    return source_id + "-en"
+
+
+# Language-independent contract fields. Prompt text and answer-shape
+# substrings are translated instead of copied.
+PAIRED_CONTRACT_FIELDS = (
+    "expected_mode",
+    "expected_depth",
+    "must_load",
+    "must_not_load",
+    "rubric",
+)
+
+# English prompts that are not translations of a Chinese fixture.
+# flash-selection-bias-en is Flash, not the Class selection-bias prompt.
+# review-llm-labels-as-construct-en has no Chinese source.
+ENGLISH_FIRST_IDS = frozenset({
+    "flash-selection-bias-en",
+    "review-llm-labels-as-construct-en",
+})
+
+
+class BilingualPairContract(unittest.TestCase):
+    """Every Chinese-first golden prompt has one English twin.
+
+    Twins share Mode, Depth, resource loads, and rubric. Ids are unique.
+    Prompt / must_include / must_not are English, not copied Chinese.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        cls.fixtures = _load_bundle()["fixtures"]
+        cls.by_id = {f["id"]: f for f in cls.fixtures}
+        cls.chinese = [f for f in cls.fixtures if f.get("lang") == "zh"]
+        cls.pairs = []
+        for src in cls.chinese:
+            twin_id = _english_twin_id(src["id"])
+            cls.pairs.append((src, cls.by_id.get(twin_id), twin_id))
+
+    def test_chinese_first_count_and_unique_twin_ids(self):
+        self.assertEqual(len(self.chinese), 10)
+        self.assertEqual(len(self.fixtures), 22)
+        twin_ids = [twin_id for _, _, twin_id in self.pairs]
+        self.assertEqual(
+            len(twin_ids),
+            len(set(twin_ids)),
+            f"English twin ids collide: {twin_ids}",
+        )
+        all_ids = [f["id"] for f in self.fixtures]
+        self.assertEqual(len(all_ids), len(set(all_ids)))
+        prompts = [f["prompt"] for f in self.fixtures]
+        self.assertEqual(len(prompts), len(set(prompts)), "duplicate prompts")
+
+    def test_each_chinese_prompt_has_one_english_twin(self):
+        for src, twin, twin_id in self.pairs:
+            self.assertIsNotNone(
+                twin, f"{src['id']}: missing English twin {twin_id}"
+            )
+            self.assertEqual(twin["lang"], "en", twin_id)
+            self.assertTrue(twin_id.endswith("-en"), twin_id)
+            self.assertNotEqual(twin_id, src["id"])
+            self.assertNotIn(twin_id, ENGLISH_FIRST_IDS)
+
+    def test_pairs_share_mode_depth_and_contract_fields(self):
+        for src, twin, twin_id in self.pairs:
+            self.assertIsNotNone(twin, twin_id)
+            for field in PAIRED_CONTRACT_FIELDS:
+                self.assertEqual(
+                    twin[field],
+                    src[field],
+                    f"{src['id']} vs {twin_id}: {field} differs",
+                )
+
+    def test_english_twins_translate_language_specific_fields(self):
+        for src, twin, twin_id in self.pairs:
+            self.assertIsNotNone(twin, twin_id)
+            self.assertFalse(
+                _has_cjk(twin["prompt"]),
+                f"{twin_id}: English prompt still contains Chinese",
+            )
+            self.assertNotEqual(twin["prompt"].strip(), src["prompt"].strip())
+            self.assertGreaterEqual(len(twin["prompt"].strip()), 6)
+            for key in ("must_include", "must_not"):
+                src_items = src[key]
+                twin_items = twin[key]
+                self.assertFalse(
+                    any(_has_cjk(item) for item in twin_items),
+                    f"{twin_id}.{key} still contains Chinese",
+                )
+                if any(_has_cjk(item) for item in src_items):
+                    self.assertNotEqual(
+                        twin_items,
+                        src_items,
+                        f"{twin_id}.{key} copied Chinese tokens",
+                    )
+                    self.assertEqual(
+                        len(twin_items),
+                        len(src_items),
+                        f"{twin_id}.{key} should translate each source token",
+                    )
+                else:
+                    self.assertEqual(
+                        twin_items,
+                        src_items,
+                        f"{twin_id}.{key} should stay identical when source tokens are not Chinese",
+                    )
+
+    def test_english_inventory_is_twins_plus_known_english_first(self):
+        twin_ids = {_english_twin_id(f["id"]) for f in self.chinese}
+        english_ids = {f["id"] for f in self.fixtures if f.get("lang") == "en"}
+        self.assertTrue(
+            twin_ids <= english_ids,
+            f"twin ids missing from lang=en: {twin_ids - english_ids}",
+        )
+        self.assertEqual(english_ids - twin_ids, set(ENGLISH_FIRST_IDS))
+        # Near-miss: the Flash selection-bias prompt is not the Class twin.
+        self.assertEqual(
+            self.by_id["flash-selection-bias-en"]["expected_depth"], "Flash"
+        )
+        self.assertEqual(
+            self.by_id["class-selection-bias-zh"]["expected_depth"], "Class"
+        )
+        self.assertEqual(
+            self.by_id["class-selection-bias-en"]["expected_depth"], "Class"
+        )
+        self.assertEqual(
+            self.by_id["class-selection-bias-en"]["expected_mode"],
+            "Classroom Teacher",
+        )
 
 
 class SkillMdAlignment(unittest.TestCase):

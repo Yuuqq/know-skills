@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "schema_notes": "Offline eval fixtures for css-professor. Static tests validate metadata completeness and coverage; they do not call a model. must_include / must_not are lowercase substrings expected of a correct answer shape when a live eval is run later.",
+  "schema_notes": "Offline eval fixtures for css-professor. Static tests validate metadata completeness and coverage; they do not call a model. must_include / must_not are lowercase substrings expected of a correct answer shape when a live eval is run later. Each lang=zh prompt has an English twin whose id ends in -en; expected_mode, expected_depth, must_load, must_not_load, and rubric match the Chinese source, while prompt, must_include, and must_not are English translations.",
   "allowed_modes": [
     "Classroom Teacher",
     "Research Mentor",
@@ -192,6 +192,154 @@
       "must_not_load": [],
       "must_include": ["中心", "权力", "外部"],
       "must_not": ["完全没问题"],
+      "rubric": "Network branch: centrality is artifact; power needs external validation."
+    },
+    {
+      "id": "flash-bayes-en",
+      "lang": "en",
+      "prompt": "What is Bayesian thinking? One sentence.",
+      "expected_mode": "Classroom Teacher",
+      "expected_depth": "Flash",
+      "must_load": [],
+      "must_not_load": [
+        "method-branches.md",
+        "professor-answer-template.md"
+      ],
+      "must_include": ["evidence", "update"],
+      "must_not": ["research question", "hypothesis", "identification strategy"],
+      "rubric": "One definitional sentence plus optional caveat; no research scaffolding."
+    },
+    {
+      "id": "class-algo-public-sphere-en",
+      "lang": "en",
+      "prompt": "Explain it the way a classroom could follow: why does algorithmic recommendation change public discourse?",
+      "expected_mode": "Classroom Teacher",
+      "expected_depth": "Class",
+      "must_load": [],
+      "must_not_load": [
+        "method-branches.md"
+      ],
+      "must_include": ["recommend", "visible"],
+      "must_not": ["minimum viable design", "causal identification assumption table"],
+      "rubric": "Judgment, concrete analogy, mechanism, one misconception, short recap."
+    },
+    {
+      "id": "studio-shortvideo-politics-en",
+      "lang": "en",
+      "prompt": "I want to study how short-video platforms affect college students' political participation. Help me design the research questions and a methods roadmap.",
+      "expected_mode": "Research Mentor",
+      "expected_depth": "Studio",
+      "must_load": [
+        "professor-answer-template.md",
+        "quality-checklist.md"
+      ],
+      "must_not_load": [],
+      "must_include": ["research question", "selection", "influence"],
+      "must_not": ["definitely prove", "necessarily lead to"],
+      "rubric": "RQ variants, constructs split, selection vs influence, min viable design, risks."
+    },
+    {
+      "id": "review-weibo-rumor-trust-en",
+      "lang": "en",
+      "prompt": "I use a Weibo retweet network to prove that rumor diffusion causes a decline in social trust. What's wrong with this design?",
+      "expected_mode": "Methodology Reviewer",
+      "expected_depth": "Review",
+      "must_load": [
+        "method-branches.md",
+        "quality-checklist.md"
+      ],
+      "must_not_load": [],
+      "must_include": ["identification", "trust", "cannot"],
+      "must_not": ["the design is quite interesting, but"],
+      "rubric": "Fatal flaw first: network alone cannot identify trust decline; name truth source vs artifacts; fixes."
+    },
+    {
+      "id": "class-selection-bias-en",
+      "lang": "en",
+      "prompt": "Explain what selection bias is.",
+      "expected_mode": "Classroom Teacher",
+      "expected_depth": "Class",
+      "must_load": [],
+      "must_not_load": [
+        "method-branches.md"
+      ],
+      "must_include": ["selection"],
+      "must_not": ["grant topic", "contribution statement"],
+      "rubric": "Depth inflation guard: Class not Studio; definition + example + adjacent term."
+    },
+    {
+      "id": "studio-fund-css-en",
+      "lang": "en",
+      "prompt": "Help me rewrite this grant topic so it reads more like computational social science research: public opinion on platforms and the modernization of social governance.",
+      "expected_mode": "Blended",
+      "expected_depth": "Studio",
+      "must_load": [
+        "chinese-academic-style.md",
+        "quality-checklist.md"
+      ],
+      "must_not_load": [],
+      "must_include": ["mechanism", "object", "method"],
+      "must_not": ["great theoretical and practical significance"],
+      "rubric": "Chinese academic register; replace slogans with object/mechanism/method/contribution."
+    },
+    {
+      "id": "blended-llm-org-collab-en",
+      "lang": "en",
+      "prompt": "How might LLMs affect organizational collaboration among knowledge workers?",
+      "expected_mode": "Blended",
+      "expected_depth": "Class",
+      "must_load": [],
+      "must_not_load": [
+        "method-branches.md"
+      ],
+      "must_include": ["collaboration", "accountability"],
+      "must_not": ["stock price", "market share will certainly"],
+      "rubric": "Class by default; mechanisms over market claims; Studio only if study design asked."
+    },
+    {
+      "id": "anti-pure-coding-en",
+      "lang": "en",
+      "prompt": "Help me fix the bug in this Python script; it won't run.",
+      "expected_mode": "Anti-trigger",
+      "expected_depth": "Minimal",
+      "must_load": [],
+      "must_not_load": [
+        "method-branches.md",
+        "professor-answer-template.md",
+        "quality-checklist.md",
+        "chinese-academic-style.md"
+      ],
+      "must_include": [],
+      "must_not": ["research question", "construct validity", "Professor's Take"],
+      "rubric": "No professor scaffolding; debug or fix code only."
+    },
+    {
+      "id": "anti-lineage-pipeline-en",
+      "lang": "en",
+      "prompt": "Distill this video course into an installable mentor Skill.",
+      "expected_mode": "Anti-trigger",
+      "expected_depth": "Minimal",
+      "must_load": [],
+      "must_not_load": [
+        "method-branches.md",
+        "professor-answer-template.md"
+      ],
+      "must_include": ["lineage"],
+      "must_not": ["classroom popular-science teacher mode output is as follows"],
+      "rubric": "Hand off to lineage-skill; css-professor does not own distillation."
+    },
+    {
+      "id": "review-network-centrality-as-power-en",
+      "lang": "en",
+      "prompt": "We computed centrality in a collaboration network and directly defined high-centrality authors as the academic power elite. Is that acceptable?",
+      "expected_mode": "Methodology Reviewer",
+      "expected_depth": "Review",
+      "must_load": [
+        "method-branches.md"
+      ],
+      "must_not_load": [],
+      "must_include": ["centrality", "power", "external"],
+      "must_not": ["no problem at all"],
       "rubric": "Network branch: centrality is artifact; power needs external validation."
     }
   ]
