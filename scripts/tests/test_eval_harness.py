@@ -38,9 +38,9 @@ class FixtureLoading(unittest.TestCase):
         bundle = eval_css_professor.load_bundle()
         self.assertIn("fixtures", bundle)
         self.assertGreaterEqual(len(bundle["fixtures"]), 10)
-        # Exact public inventory: 12 original prompts + 10 English twins
+        # Exact public inventory: 12 original prompts + 10 twins + a DiD pair
         # for Chinese-first prompts. Equality still rejects shrinkage.
-        self.assertEqual(len(bundle["fixtures"]), 22)
+        self.assertEqual(len(bundle["fixtures"]), 24)
 
     def test_each_fixture_has_scoring_fields(self):
         fixtures = eval_css_professor.load_bundle()["fixtures"]

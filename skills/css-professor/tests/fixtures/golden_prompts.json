@@ -195,6 +195,30 @@
       "rubric": "Network branch: centrality is artifact; power needs external validation."
     },
     {
+      "id": "review-panel-did-zh",
+      "lang": "zh",
+      "prompt": "审稿：我们用面板数据做双重差分，政策分批实施，TWFE event study 的前趋势看起来很平，所以认定政策有效。这个设计有什么问题？",
+      "expected_mode": "Methodology Reviewer",
+      "expected_depth": "Review",
+      "must_load": ["method-branches.md", "quality-checklist.md"],
+      "must_not_load": [],
+      "must_include": ["平行趋势", "异质", "聚类", "识别"],
+      "must_not": ["证明了平行趋势"],
+      "rubric": "Panel/DiD branch: identify truth source vs artifacts; pre-trends do not prove parallel trends; check staggered TWFE bias, anticipation, composition, and clustered inference."
+    },
+    {
+      "id": "review-panel-did-en",
+      "lang": "en",
+      "prompt": "Review our design: we use panel data for difference-in-differences (DiD) with staggered policy adoption. The pre-trends in our TWFE event study look flat, so we conclude the policy works. What's wrong with this design?",
+      "expected_mode": "Methodology Reviewer",
+      "expected_depth": "Review",
+      "must_load": ["method-branches.md", "quality-checklist.md"],
+      "must_not_load": [],
+      "must_include": ["parallel trends", "heterogene", "cluster", "identification"],
+      "must_not": ["proved parallel trends"],
+      "rubric": "Panel/DiD branch: identify truth source vs artifacts; pre-trends do not prove parallel trends; check staggered TWFE bias, anticipation, composition, and clustered inference."
+    },
+    {
       "id": "flash-bayes-en",
       "lang": "en",
       "prompt": "What is Bayesian thinking? One sentence.",

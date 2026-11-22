@@ -48,8 +48,7 @@ def _load(rel: Path) -> str:
     return p.read_text(encoding="utf-8")
 
 
-# The eight empirical method branches that the original agent-loop methodology
-# owned and that css-professor is supposed to have inherited. If a branch name
+# The nine empirical method branches that css-professor supports. If a branch name
 # drifts, the inheritance contract has broken and a reviewer would silently lose
 # coverage for that method.
 EXPECTED_METHOD_BRANCHES = [
@@ -57,6 +56,7 @@ EXPECTED_METHOD_BRANCHES = [
     "Qualitative Coding / Digital Ethnography",
     "Network Analysis",
     "Causal Inference / Quasi-Experiment",
+    "Panel Data / Difference-in-Differences",
     "Survey / Experiment",
     "Simulation / Agent-Based Modeling",
     "Platform / Digital Trace Data",
@@ -157,9 +157,9 @@ class ResourceCrossReference(unittest.TestCase):
 
 class MethodBranchesInheritance(unittest.TestCase):
     """The whole point of the css-professor / agent-loop merge was to carry the
-    8 method-specific evidence rules forward. These tests guard that."""
+    inherited evidence rules forward and extend them. These tests guard that."""
 
-    def test_all_eight_branches_present(self):
+    def test_all_nine_branches_present(self):
         text = _load(Path("references/method-branches.md"))
         headers = re.findall(r"^## (.+)$", text, re.MULTILINE)
         for branch in EXPECTED_METHOD_BRANCHES:
@@ -168,7 +168,7 @@ class MethodBranchesInheritance(unittest.TestCase):
     def test_each_branch_states_truth_source_rule(self):
         text = _load(Path("references/method-branches.md"))
         blocks = re.split(r"^## ", text, flags=re.MULTILINE)[1:]
-        self.assertGreaterEqual(len(blocks), 8)
+        self.assertGreaterEqual(len(blocks), 9)
         for block in blocks:
             title = block.splitlines()[0].strip()
             if title.startswith("How To Use"):
@@ -203,6 +203,24 @@ class MethodBranchesInheritance(unittest.TestCase):
         text = _load(Path("references/method-branches.md")).lower()
         self.assertIn("matching branch", text)
         self.assertIn("not this whole file", text)
+
+    def test_panel_did_review_requirements(self):
+        text = _load(Path("references/method-branches.md"))
+        branch = text.split("## Panel Data / Difference-in-Differences\n", 1)[1]
+        branch = " ".join(branch.split("\n## ", 1)[0].lower().split())
+        for term in (
+            "truth source", "measurement artifacts", "parallel-trends",
+            "pre-trend eyeballing", "goodman-bacon", "callaway-sant'anna",
+            "sun-abraham", "anticipation", "unbalanced panels",
+            "cluster", "serial correlation", "decisive review questions",
+        ):
+            self.assertIn(term, branch)
+
+    def test_panel_did_review_triggers_in_hard_load_table(self):
+        text = _load(Path("SKILL.md")).split("## Hard Load Table", 1)[1]
+        table = text.split("## Anti-Triggers", 1)[0]
+        for term in ("panel", "DiD", "双重差分", "面板数据", "event study"):
+            self.assertIn(term, table)
 
 
 class SkillBodyContract(unittest.TestCase):
