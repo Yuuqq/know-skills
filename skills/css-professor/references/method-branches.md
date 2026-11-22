@@ -92,9 +92,12 @@ also apply Causal Inference / Quasi-Experiment.
 
 - **Define**: unit and time indices, outcome measurement, treatment timing and
   adoption cohorts, comparison groups, event-time window, and target estimand.
-- **Require**: auditable unit-time records and treatment dates; a missingness,
-  attrition, and entry/exit audit for composition changes in unbalanced panels;
-  an explicit parallel-trends assumption and substantive justification;
+- **Require**: auditable unit-time records; a missingness, attrition, and
+  entry/exit audit for composition changes in unbalanced panels. For
+  descriptive panels, stop there plus serial-correlation-aware inference. When
+  a treatment, policy, or event is evaluated (DiD, event study), also require
+  verified treatment dates; an explicit parallel-trends assumption and
+  substantive justification;
   anticipation windows, spillover checks, and sensitivity to comparison groups.
   Report pre-trend estimates with uncertainty and power limits: pre-trend
   eyeballing or insignificant leads cannot establish parallel trends.
