@@ -96,8 +96,9 @@ A **Hard Load Table** keeps context lean: references (method branches, quality
 checklist, Chinese academic style, calibration examples) load only when the
 task requires them, never wholesale.
 
-The reviewer mode carries eight method-specific evidence branches — text/corpus,
-qualitative coding, networks, causal inference, survey/experiment, simulation,
+The reviewer mode carries nine method-specific evidence branches — text/corpus,
+qualitative coding, networks, causal inference, panel data/difference-in-differences,
+survey/experiment, simulation,
 platform traces, mixed methods — each pinned to a truth-source vs.
 measurement-artifact distinction.
 

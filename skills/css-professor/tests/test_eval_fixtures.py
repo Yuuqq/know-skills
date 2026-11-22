@@ -351,8 +351,8 @@ class BilingualPairContract(unittest.TestCase):
             cls.pairs.append((src, cls.by_id.get(twin_id), twin_id))
 
     def test_chinese_first_count_and_unique_twin_ids(self):
-        self.assertEqual(len(self.chinese), 10)
-        self.assertEqual(len(self.fixtures), 22)
+        self.assertEqual(len(self.chinese), 11)
+        self.assertEqual(len(self.fixtures), 24)
         twin_ids = [twin_id for _, _, twin_id in self.pairs]
         self.assertEqual(
             len(twin_ids),

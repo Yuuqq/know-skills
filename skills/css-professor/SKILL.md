@@ -56,7 +56,7 @@ Load only what the task requires. Do not preload every reference.
 | Flash / short factual or pure concept | None beyond this file |
 | Class explanation (non-method) | Optional: `references/examples.md` if routing unclear |
 | Studio research design / proposal / thesis structure | `assets/professor-answer-template.md` + `references/quality-checklist.md` |
-| Review of methods, causal claims, measurement, empirical design | `references/method-branches.md` (**matching branch only**) + `references/quality-checklist.md` |
+| Review of methods, causal claims, measurement, empirical design (including panel / 面板数据, DiD / 双重差分, event study) | `references/method-branches.md` (**matching branch only**) + `references/quality-checklist.md` |
 | Chinese academic writing, 基金, 开题, 中文审稿, 中文课堂 | `references/chinese-academic-style.md` |
 | Routing or stance uncertain | One matching block in `references/examples.md` |
 

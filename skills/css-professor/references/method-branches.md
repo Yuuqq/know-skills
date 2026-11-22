@@ -84,6 +84,47 @@ effect.
 - **Truth source**: observed assignment, treatment, outcome, and covariate
   records. Estimates are derived artifacts constrained by assumptions.
 
+## Panel Data / Difference-in-Differences
+
+When the user analyzes repeated observations of units (panel, 面板数据), evaluates
+a policy with DiD (双重差分), or interprets an event study. For causal claims,
+also apply Causal Inference / Quasi-Experiment.
+
+- **Define**: unit and time indices, outcome measurement, treatment timing and
+  adoption cohorts, comparison groups, event-time window, and target estimand.
+- **Require**: auditable unit-time records; a missingness, attrition, and
+  entry/exit audit for composition changes in unbalanced panels. For
+  descriptive panels, stop there plus serial-correlation-aware inference. When
+  a treatment, policy, or event is evaluated (DiD, event study), also require
+  verified treatment dates; an explicit parallel-trends assumption and
+  substantive justification;
+  anticipation windows, spillover checks, and sensitivity to comparison groups.
+  Report pre-trend estimates with uncertainty and power limits: pre-trend
+  eyeballing or insignificant leads cannot establish parallel trends.
+  Under staggered adoption / heterogeneous effects, diagnose two-way fixed
+  effects (TWFE) bias and already-treated comparisons using Goodman-Bacon's
+  decomposition; consider Callaway-Sant'Anna group-time effects or Sun-Abraham
+  interaction-weighted event studies with valid comparison groups and explicit
+  aggregation weights. Cluster standard errors at the assignment level to
+  address within-cluster serial correlation; report cluster counts and justify
+  inference with few clusters.
+- **Unacceptable evidence**: a flat-looking pre-trend plot as proof of parallel
+  trends, a before/after coefficient as identification, or a conventional TWFE
+  event study interpreted causally without checking timing, heterogeneity,
+  anticipation, changing sample composition, and serial correlation.
+- **Truth source**: original unit-time outcome records, verified treatment and
+  assignment dates, and sample membership logs. Event-study plots, pre-trend
+  tests, TWFE coefficients, and group-time estimates are measurement artifacts,
+  not truth; causal interpretation remains conditional on assumptions.
+- **Decisive review questions**:
+  1. Which untreated or not-yet-treated units identify each cohort-time effect,
+     and why would their untreated trends be parallel absent anticipation?
+  2. Could heterogeneous effects, already-treated controls, or panel composition
+     changes explain the result, and does an appropriate alternative estimator
+     preserve it?
+  3. Do clustering and serial-correlation adjustments match assignment, and is
+     uncertainty credible given the number of independent clusters?
+
 ## Survey / Experiment
 
 When the user fields a questionnaire, vignette, conjoint, or randomized
